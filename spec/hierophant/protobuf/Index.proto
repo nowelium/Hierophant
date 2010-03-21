@@ -1,0 +1,116 @@
+package hierophant.protobuf.index;
+
+option optimize_for = SPEED;
+
+message Group {
+    required string name = 1;
+}
+message Node {
+    required string name = 1;
+    required string ipAddr = 2;
+    required uint32 port = 3;
+}
+message GroupNode {
+    required Group group = 1;
+    required Node node = 2;
+}
+enum Status {
+    DOWN = 0;
+    ACTIVE = 1;
+    REPLICATION = 2;
+    PROXYING = 3;
+}
+enum Operation {
+    NOP = 0;
+    REPLICA = 1;
+}
+
+message ManagementRequest {
+    message AddGroup {
+        required Group group = 1;
+    }
+    message RemoveGroup {
+        required Group group = 1;
+    }
+    message AddNode {
+        required Group group = 1;
+        required Node node = 2;
+    }
+    message RemoveNode {
+        required Group group = 1;
+        required Node node = 2;
+    }
+    message GetNodeList {
+    }
+    message NodeStatus {
+        required Group group = 1;
+        required Node node = 2;
+    }
+    message Replica {
+        required Node from = 1;
+        required Node to = 2;
+    }
+    message Proxy {
+        required Node from = 1;
+        required Node to = 2;            
+    }
+}
+    
+message ManagementResponse {
+    message AddGroup {
+    }
+    message RemoveGroup {
+    }
+    message AddNode {
+    }
+    message RemoveNode {
+    }
+    message GetNodeList {
+        repeated GroupNode list = 1;
+    }
+    message NodeStatus {
+        required Status status = 1;
+        required uint64 keySize = 2;
+    }
+    message Replica {
+    }
+    message Proxy {
+    }
+}
+
+message IndexRequest {
+    message GetNodeList {
+    }
+    message SetStatus {
+        required uint64 keySize = 1;
+    }
+    message GetOperation {
+    }
+}
+message IndexResponse {
+    message GetNodeList {
+        repeated Node nodes = 1;
+    }
+    message SetStatus {
+    }
+    message GetOperation {
+        required Operation operation = 1;
+    }
+}
+
+service ManagementService {
+    rpc addGroup(ManagementRequest.AddGroup) returns(ManagementResponse.AddGroup);
+    rpc removeGroup(ManagementRequest.RemoveGroup) returns(ManagementResponse.RemoveGroup);
+    rpc addNode(ManagementRequest.AddNode) returns(ManagementResponse.AddNode);
+    rpc removeNode(ManagementRequest.RemoveNode) returns(ManagementResponse.RemoveNode);
+    rpc nodeStatus(ManagementRequest.NodeStatus) returns(ManagementResponse.NodeStatus);
+    rpc getNodeList(ManagementRequest.GetNodeList) returns(ManagementResponse.GetNodeList);
+    rpc replica(ManagementRequest.Replica) returns(ManagementResponse.Replica);
+    rpc proxy(ManagementRequest.Proxy) returns(ManagementResponse.Proxy);
+}
+
+service IndexService {
+    rpc getNodeList(IndexRequest.GetNodeList) returns(IndexResponse.GetNodeList);
+    rpc setStatus(IndexRequest.SetStatus) returns(IndexResponse.SetStatus);
+    rpc getOperation(IndexRequest.GetOperation) returns(IndexResponse.GetOperation);
+}

@@ -1,0 +1,53 @@
+package hierophant.protobuf.storage;
+
+option optimize_for = SPEED;
+
+message Store {
+    message Key {
+        required string key = 1;
+    }
+    message Value {
+        required bytes value = 1;
+        required uint64 size = 2;
+
+        optional uint32 flags = 3;
+        optional uint64 expired_at_tstmp = 4 [default = 0];
+        optional bool heap = 5 [default = false];
+    }
+    required Key key = 1;
+    required Value value = 2;
+}
+message Request {
+    message Set {
+        required Store store = 1;
+    }
+    message Get {
+        required Store.Key key = 1;
+    }
+    message Remove {
+        required Store.Key key = 1;
+        optional uint64 exclution_at_tstmp = 2 [default = 0];
+    }
+    message Flush {
+        optional uint64 exclution_at_tstmp = 1 [default = 0];
+    }
+}
+message Response {
+    message Set {
+        required bool succeed = 1;
+    }
+    message Get {
+        required Store store = 1;
+    }
+    message Remove {
+    }
+    message Flush {
+    }
+}
+
+service StorageService {
+    rpc set(Request.Set) returns(Response.Set);
+    rpc get(Request.Get) returns(Response.Get);
+    rpc remove(Request.Remove) returns(Response.Remove);
+    rpc flush(Request.Flush) returns(Response.Flush);
+}

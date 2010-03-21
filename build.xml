@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project name="hierophant" default="usage" basedir=".">
+  <property file="build.properties"/>
+
+  <macrodef name="gen-protos">
+    <attribute name="outdir" />
+    <attribute name="dir" />
+    <attribute name="target" />
+    
+    <sequential>
+      <echo message="java outdir: @{outdir}" />
+      <echo message="protoc execdir: @{dir}" />
+      <echo message="target: @{target}.proto" />
+      
+      <exec executable="/usr/local/bin/protoc" dir="@{dir}" failonerror="true">
+        <arg line="--java_out=@{outdir} @{target}.proto" />
+      </exec>
+    </sequential>
+  </macrodef>
+  
+  <macrodef name="gen-jjt">
+    <attribute name="outdir" />
+    <attribute name="dir" />
+    <attribute name="target" />
+    <sequential>
+      <exec executable="java" dir="@{dir}" failonerror="true">
+        <arg line="-cp ${javacc.home.dir}/javacc.jar jjtree @{target}.jjt" />
+      </exec>
+      <exec executable="java" dir="@{dir}" failonerror="true">
+        <arg line="-cp ${javacc.home.dir}/javacc.jar javacc @{target}.jj" />
+      </exec>
+    </sequential>
+  </macrodef>
+  
+  <target name="usage">
+    <echo message="" />
+    <echo message="${ant.project.name} usage" />
+    <echo message="--------------------" />
+    <echo message="--------------------" />
+  </target>
+  
+  <target name="spec-gen">
+    <gen-protos outdir="${spec.dir}" dir="${protobuf.dir}" target="Storage" />
+    <gen-protos outdir="${spec.dir}" dir="${protobuf.dir}" target="Index" />
+    
+    <!--
+    <gen-jjt outdir="${spec.dir}" dir="${jjt.dir}" target="memcache" />
+    -->
+  </target>
+</project>
