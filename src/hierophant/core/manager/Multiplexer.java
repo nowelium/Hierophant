@@ -8,7 +8,7 @@ import hierophant.core.cache.impl.DefaultLifeCycleExecutor;
 import hierophant.core.cache.impl.DistributedNodeCache;
 import hierophant.core.hash.HashFunction;
 import hierophant.core.hash.impl.ConsistentHashContainer;
-import hierophant.core.hash.impl.HashMD5Function;
+import hierophant.core.hash.impl.Hash;
 import hierophant.core.node.StorageNode;
 import hierophant.core.node.impl.LoopBackStorageNode;
 import hierophant.protobuf.storage.StorageReceiver;
@@ -23,7 +23,7 @@ import com.googlecode.protobuf.socketrpc.SocketRpcServer;
 
 public class Multiplexer {
     
-    protected final HashFunction function = new HashMD5Function();
+    protected final HashFunction function = Hash.MD5;
     
     protected final ConsistentHashContainer<StorageNode<String, Entry<String, String>>> container;
     

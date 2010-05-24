@@ -9,7 +9,7 @@ public class HashMD5FunctionTest {
 
     @Test
     public void testHash() {
-        HashFunction func = new HashMD5Function();
+        HashFunction func = Hash.MD5;
         System.out.println("hoge = \t" + func.hash("hoge"));
         System.out.println("foo  = \t" + func.hash("foo"));
         System.out.println("bar  = \t" + func.hash("bar"));

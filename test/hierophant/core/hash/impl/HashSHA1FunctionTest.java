@@ -9,7 +9,7 @@ public class HashSHA1FunctionTest {
 
     @Test
     public void testHashString() {
-        HashFunction func = new HashSHA1Function();
+        HashFunction func = Hash.SHA1;
         System.out.println("hoge = \t" + func.hash("hoge"));
         System.out.println("foo  = \t" + func.hash("foo"));
         System.out.println("bar  = \t" + func.hash("bar"));
